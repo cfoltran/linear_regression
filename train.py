@@ -70,11 +70,15 @@ def get_dataset():
             for [row] in reader:
                 data.append((float(row.split(',')[0]), float(row.split(',')[1])))
         return data
-    except:
+    except FileNotFoundError:
         print("Error: data.csv not found")
-        exit()
+        sys.exit(1)
 
 def main():
+    """Main function to run the linear regression model."""
+    if len(sys.argv) != 3:
+        print("Usage: python3 train.py [learning_rate] [n_iterations]")
+        sys.exit(1)
     try:
         learning_rate = float(sys.argv[1])
         n = int(sys.argv[2])
@@ -92,12 +96,15 @@ def main():
         dt0, dt1 = dernorm_theta(theta0, theta1, mean_mileage, std_mileage)
         print('theta0: ', dt0, '\ntheta1: ', dt1, '\ncost: ', cost)
 
-        x = [x for x, _ in data];
-        plt.scatter([x for x, _ in data], [y for _, y in data])
-        plt.plot([min(x), max(x)], [model(min(x), dt0, dt1), model(max(x), dt0, dt1)], color='red')
+        x = [x for x, _ in data]
+        plt.scatter(x, [y for _, y in data], label='Data points')
+        plt.plot([min(x), max(x)], [model(min(x), dt0, dt1), model(max(x), dt0, dt1)], color='red', label='Regression line')
+        plt.xlabel('Mileage')
+        plt.ylabel('Price')
+        plt.legend()
         plt.show()
-    except:
-        print("Usage: python3 train.py [learning_rate] [n_iterations]")
+    except ValueError as e:
+        print(f"Invalid input: {e}")
 
 
 if __name__ == "__main__":
