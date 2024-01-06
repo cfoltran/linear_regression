@@ -8,10 +8,6 @@ def mean(list):
 def var(list):
     return sum((x - mean(list)) ** 2 for x in list) / len(list)
 
-# square root of the variance
-def std(list):
-    return var(list) ** .5 
-
 # f(x) = ax + b
 def model(mileage, t0, t1):
     return (t1 * mileage) + t0
